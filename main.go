@@ -7,7 +7,7 @@ import (
 
 	rtsp "github.com/deepch/sample_rtsp"
 	"github.com/pion/webrtc/v2/pkg/media"
-	"github.com/rtsp2webrtc/rest"
+	"github.com/wenwu-bianjie/rtsp2webrtc/rest"
 )
 
 var (

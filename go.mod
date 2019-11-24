@@ -1,4 +1,4 @@
-module github.com/deepch/RTSPtoWebRTC
+module github.com/wenwu-bianjie/rtsp2webrtc
 
 go 1.12
 
@@ -9,5 +9,3 @@ require (
 	github.com/gorilla/mux v1.7.1
 	github.com/pion/webrtc/v2 v2.0.12
 )
-
-replace github.com/rtsp2webrtc/rest => ./rest
