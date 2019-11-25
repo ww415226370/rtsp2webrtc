@@ -10,11 +10,6 @@ import (
 	"github.com/wenwu-bianjie/rtsp2webrtc/rest"
 )
 
-var (
-	VideoWidth  int
-	VideoHeight int
-)
-
 func main() {
 	rest.StartHTTPServer()
 	

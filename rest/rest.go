@@ -5,26 +5,15 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
-	"sync"
-	"strings"
 
 	"encoding/base64"
 
 	"github.com/gorilla/mux"
 	"github.com/pion/webrtc/v2"
+	rtsp "github.com/deepch/sample_rtsp"
+	"github.com/wenwu-bianjie/rtsp2webrtc/service"
 	//ice "github.com/pions/webrtc/internal/ice"
 )
-
-type Track []*webrtc.Track
-
-type WebrtcTracks struct {
-	Tracks map[string]Track
-	lock   sync.RWMutex
-}
-
-var VideoTracks = WebrtcTracks{
-	Tracks: map[string]Track{},
-}
 // var DataChanelTest chan<- webrtc.RTCSample
 
 func StartHTTPServer() {
@@ -38,6 +27,7 @@ func StartHTTPServer() {
 		return
 	}
 }
+
 func HTTPHome(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	data := r.FormValue("data")
@@ -51,7 +41,6 @@ func HTTPHome(w http.ResponseWriter, r *http.Request) {
 	createVideoTrack(sd, rtspUrl, w)
 }
 
-
 func createVideoTrack(sd []byte, rtspUrl string, w http.ResponseWriter) {
 	peerConnection, err := webrtc.NewPeerConnection(webrtc.Configuration{
 		ICEServers: []webrtc.ICEServer{
@@ -63,24 +52,30 @@ func createVideoTrack(sd []byte, rtspUrl string, w http.ResponseWriter) {
 	if err != nil {
 		panic(err)
 	}
-	peerConnection.OnICEConnectionStateChange(func(connectionState webrtc.ICEConnectionState) {
-		fmt.Printf("Connection State has changed %s \n", connectionState.String())
-	})
 
-	rtspUrlSlice := strings.Split(rtspUrl, ",")
-	for _, v := range rtspUrlSlice {
-		vp8Track, err := peerConnection.NewTrack(webrtc.DefaultPayloadTypeH264, rand.Uint32(), "video", v)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-		_, err = peerConnection.AddTrack(vp8Track)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-		addTrackToVideoTracks(v, vp8Track)
+	vp8Track, err := peerConnection.NewTrack(webrtc.DefaultPayloadTypeH264, rand.Uint32(), "video", rtspUrl)
+	if err != nil {
+		log.Println(err)
+		return
 	}
+	_, err = peerConnection.AddTrack(vp8Track)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	peerConnection.OnICEConnectionStateChange(func(rtspUrl string, vp8Track *webrtc.Track) func(webrtc.ICEConnectionState) {
+		return func(connectionState webrtc.ICEConnectionState) {
+			if connectionState.String() == "disconnected" {
+				removeTrackToVideoTracks(rtspUrl, vp8Track)
+				err = peerConnection.Close()
+				if err != nil {
+					log.Println(err)
+				}
+			}
+			fmt.Printf("Connection State has changed %s \n", connectionState.String())
+		}
+	}(rtspUrl, vp8Track))
 
 	offer := webrtc.SessionDescription{
 		Type: webrtc.SDPTypeOffer,
@@ -95,19 +90,50 @@ func createVideoTrack(sd []byte, rtspUrl string, w http.ResponseWriter) {
 		log.Println(err)
 		return
 	}
+
 	w.Write([]byte(base64.StdEncoding.EncodeToString([]byte(answer.SDP))))
-	
+
+	addTrackToVideoTracks(rtspUrl, vp8Track)
 }
 
-
-func addTrackToVideoTracks (rtspUrl string, vp8Track *webrtc.Track) {
-	VideoTracks.lock.Lock();
-	defer VideoTracks.lock.Unlock();
-
-	if tracks, ok := VideoTracks.Tracks[rtspUrl]; ok {
-		newTracks := append(tracks, vp8Track);
-		VideoTracks.Tracks[rtspUrl] = newTracks;
+func addTrackToVideoTracks (rtspUrl string, newTrack *webrtc.Track) {
+	service.VideoWebrtcTracks.Lock.Lock();
+	defer service.VideoWebrtcTracks.Lock.Unlock();
+	if track, ok := service.VideoWebrtcTracks.RtspTracks[rtspUrl]; ok {
+		newTracks := append(track.Tracks, newTrack);
+		service.VideoWebrtcTracks.RtspTracks[rtspUrl].Tracks = newTracks;
 	} else {
-		VideoTracks.Tracks[rtspUrl] = []*webrtc.Track{vp8Track}
+		service.VideoWebrtcTracks.RtspTracks[rtspUrl] = &service.RtspTrack{
+			Tracks: []*webrtc.Track{newTrack},
+		}
+	}
+	// 创建 rtspClient
+	if service.VideoWebrtcTracks.RtspTracks[rtspUrl].RtspClient == nil {
+		client := rtsp.RtspClientNew()
+		service.VideoWebrtcTracks.RtspTracks[rtspUrl].RtspClient = client
+		service.NewRtspClient(client, rtspUrl)
 	}
 }
+
+func removeTrackToVideoTracks (rtspUrl string, delTrack *webrtc.Track) {
+	service.VideoWebrtcTracks.Lock.Lock();
+	defer service.VideoWebrtcTracks.Lock.Unlock();
+
+	if track, ok := service.VideoWebrtcTracks.RtspTracks[rtspUrl]; ok {
+		tracks := track.Tracks
+    	for i := 0; i < len(tracks); i++ {
+    		if tracks[i] == delTrack {
+        		newTracks := append(tracks[:i], tracks[i+1:]...)
+				service.VideoWebrtcTracks.RtspTracks[rtspUrl].Tracks = newTracks
+            	break
+            }
+        }
+        if len(service.VideoWebrtcTracks.RtspTracks[rtspUrl].Tracks) == 0 {
+        	client := service.VideoWebrtcTracks.RtspTracks[rtspUrl].RtspClient
+        	if client != nil {
+				client.Close()
+        	}
+        }
+	}
+}
+
