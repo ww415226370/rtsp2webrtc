@@ -9,7 +9,7 @@ import (
 	"github.com/pion/webrtc/v2/pkg/media"
 )
 
-func NewRtspClient (client *rtsp.RtspClient, rtspUrl string) {
+func NewRtspClient (client *rtsp.RtspClient, rtspUrl string) error {
 	var startTime string = time.Now().UTC().Format("2006-01-02T15:04:05Z")
 	url := rtspUrl + "?starttime=" + startTime
 	sps := []byte{}
@@ -24,7 +24,8 @@ func NewRtspClient (client *rtsp.RtspClient, rtspUrl string) {
 		// 	DataChanelTest <- webrtc.RTCSample{Data: payload, Samples: uint32(ts - preTS)}
 		// }
 		if preTS != 0 {
-			for _, videoTrack := range VideoWebrtcTracks.RtspTracks[rtspUrl].Tracks {
+			tracks := VideoWebrtcTracks.RtspTracks[rtspUrl].Tracks
+			for _, videoTrack := range tracks {
 				if videoTrack != nil {
 					videoTrack.WriteSample(media.Sample{Data: payload, Samples: uint32(ts - preTS)})
 				}
@@ -59,6 +60,10 @@ func NewRtspClient (client *rtsp.RtspClient, rtspUrl string) {
 	}
 	if err := client.Open(url); err != nil {
 		fmt.Println("[RTSP] Error", err)
+		tracks := VideoWebrtcTracks.RtspTracks[rtspUrl].Tracks
+		VideoWebrtcTracks.RtspTracks[rtspUrl].Tracks = tracks[0:0]
+		client.Close()
+		return err
 	} else {
 		go func(client *rtsp.RtspClient) {
 			for {
@@ -105,6 +110,7 @@ func NewRtspClient (client *rtsp.RtspClient, rtspUrl string) {
 					}
 				}
 			}
-		}(client)	
+		}(client)
+		return nil	
 	}
 }

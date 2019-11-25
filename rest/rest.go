@@ -91,12 +91,19 @@ func createVideoTrack(sd []byte, rtspUrl string, w http.ResponseWriter) {
 		return
 	}
 
-	w.Write([]byte(base64.StdEncoding.EncodeToString([]byte(answer.SDP))))
+	err = addTrackToVideoTracks(rtspUrl, vp8Track)
 
-	addTrackToVideoTracks(rtspUrl, vp8Track)
+	if err != nil {
+		peerConnection.Close()
+		w.WriteHeader(500)
+		w.Write([]byte(fmt.Sprintf("%s", err)))
+		return
+	}
+
+	w.Write([]byte(base64.StdEncoding.EncodeToString([]byte(answer.SDP))))
 }
 
-func addTrackToVideoTracks (rtspUrl string, newTrack *webrtc.Track) {
+func addTrackToVideoTracks (rtspUrl string, newTrack *webrtc.Track) error {
 	service.VideoWebrtcTracks.Lock.Lock();
 	defer service.VideoWebrtcTracks.Lock.Unlock();
 	if track, ok := service.VideoWebrtcTracks.RtspTracks[rtspUrl]; ok {
@@ -111,8 +118,13 @@ func addTrackToVideoTracks (rtspUrl string, newTrack *webrtc.Track) {
 	if service.VideoWebrtcTracks.RtspTracks[rtspUrl].RtspClient == nil {
 		client := rtsp.RtspClientNew()
 		service.VideoWebrtcTracks.RtspTracks[rtspUrl].RtspClient = client
-		service.NewRtspClient(client, rtspUrl)
+		err := service.NewRtspClient(client, rtspUrl)
+		if err != nil {
+			service.VideoWebrtcTracks.RtspTracks[rtspUrl].RtspClient = nil
+			return err
+		}
 	}
+	return nil
 }
 
 func removeTrackToVideoTracks (rtspUrl string, delTrack *webrtc.Track) {
@@ -132,6 +144,7 @@ func removeTrackToVideoTracks (rtspUrl string, delTrack *webrtc.Track) {
         	client := service.VideoWebrtcTracks.RtspTracks[rtspUrl].RtspClient
         	if client != nil {
 				client.Close()
+				service.VideoWebrtcTracks.RtspTracks[rtspUrl].RtspClient = nil
         	}
         }
 	}

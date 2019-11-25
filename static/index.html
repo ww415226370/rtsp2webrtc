@@ -129,19 +129,25 @@
                 }, 
                 function (err, offer) {
                     if (!err) {
-                        $.post("/recive", 
-                        {
-                            data:btoa(offer.sdp), rtspUrl: rtspUrl
-                        },
-                        function(data){
-                            try {
-                                pc.handleAnswer({type: 'answer', sdp: atob(data)}, function (err) {
-                                    if (err) {
-                                        log(err);
-                                    }
-                                })
-                            } catch (e) {
-                                alert(e)
+                        $.ajax({
+                            url: "/recive",
+                            type: 'post',
+                            data: {
+                                data:btoa(offer.sdp), rtspUrl: rtspUrl
+                            },
+                            success: function(data){
+                                try {
+                                    pc.handleAnswer({type: 'answer', sdp: atob(data)}, function (err) {
+                                        if (err) {
+                                            log(err);
+                                        }
+                                    })
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            },
+                            error: function(err) {
+                                pc.close();
                             }
                         });
                     }
