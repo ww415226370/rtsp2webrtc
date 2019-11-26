@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>rtsp-webrtc</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <style type="text/css">
+        #remoteVideos {
+            margin-top: 20px;
+            overflow-x: auto;
+            display: flex;
+            flex-wrap: nowrap;
+        }
+        #remoteVideos video {
+            width: 30%;
+            margin: 0 10px;
+        }
+        button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript" src="./jquery.min.js"></script>
+    <script type="text/javascript" src="./rtcpeerconnection.bundle.js"></script>
+    <div id="remoteVideos"></div>
+   <!--  <br />
+    Browser base64 Session Description
+    <textarea id="localSessionDescription" readonly="true"></textarea> <br />
+    Golang base64 Session Description:
+    <textarea id="remoteSessionDescription"></textarea>
+    <br/> -->
+<!-- 
+    <button onclick="window.startSession()"> Start Session </button> -->
+    <button onclick="closeWebRtc()">断开视频</button>
+    <button onclick="togglePlay(event)">暂停</button>
+    <script>
+        var rtsplist = [
+            'rtsp://admin:admin@172.18.135.131:554/1/h264major',
+            'rtsp://admin:admin@172.18.135.131:554/1/h264major',
+            'rtsp://admin:admin@172.18.135.131:554/1/h264major',
+            'rtsp://admin:admin@172.18.135.131:554/1/h264major',
+            'rtsp://admin:admin@172.18.135.131:554/1/h264major'
+        ];
+
+        var peerConnections = [];
+
+        rtsplist.forEach(function(v) {
+            newPeerConnection(v);
+        });
+
+        function newPeerConnection(rtspUrl) {
+            var newRtcPeerConnection = new PeerConnection();
+            peerConnections.push(newRtcPeerConnection);
+            rtcPeerCreateOffer(newRtcPeerConnection, rtspUrl);
+        }
+        
+
+        /* eslint-env browser */
+        // let pc = new RTCPeerConnection({
+        //   iceServers: [
+        //     {
+        //       urls: 'stun:stun.l.google.com:19302'
+        //     }
+        //   ]
+        // })
+        var log = function(msg){
+            console.log(msg);
+        }
+
+        function togglePlay (e) {
+            if ($(e.target).html() === '暂停') {
+                $(e.target).html('播放');
+                document.querySelectorAll('video').forEach(function(v) {
+                    v.pause();
+                });
+            } else {
+                $(e.target).html('暂停');
+                document.querySelectorAll('video').forEach(function(v) {
+                    v.play();
+                });
+            }
+        }
+
+        function rtcPeerCreateOffer(pc, rtspUrl) {
+            // pc.ontrack = function (event) {
+            //     var el = document.createElement(event.track.kind)
+            //     el.srcObject = event.streams[0]
+            //     el.autoplay = true
+            //     el.controls = true
+            //     document.getElementById('remoteVideos').appendChild(el)
+            // }
+
+            // pc.oniceconnectionstatechange = function(e) {
+            //     log(pc.iceConnectionState);
+            // }
+
+            // pc.onicecandidate = event => {
+            //     if (event.candidate === null) {
+            //         document.getElementById('localSessionDescription').value = btoa(pc.localDescription.sdp)
+            //         $.post("/recive", 
+            //         {
+            //             data:btoa(pc.localDescription.sdp), rtspUrl: rtspUrl
+            //         },
+            //         function(data){
+            //             document.getElementById('remoteSessionDescription').value = data
+            //             window.startSession(pc)
+            //         });
+            //     }
+            // }
+
+            // pc.createOffer({offerToReceiveVideo: true, offerToReceiveAudio: true})
+            // .then(function(d) {
+            //     pc.setLocalDescription(d)}
+            // ).catch(log)
+
+            pc.on('addStream', function (event) {
+                // it's your job to send these to someone
+                var el = document.createElement('video');
+                el.srcObject = event.stream
+                el.autoplay = true
+                el.controls = true
+                el.muted = true
+                document.getElementById('remoteVideos').appendChild(el)
+            });
+
+
+            pc.offer(
+                {
+                    offerToReceiveAudio: false,
+                    offerToReceiveVideo: true
+                }, 
+                function (err, offer) {
+                    if (!err) {
+                        $.ajax({
+                            url: "/recive",
+                            type: 'post',
+                            data: {
+                                data:btoa(offer.sdp), rtspUrl: rtspUrl
+                            },
+                            success: function(data){
+                                try {
+                                    pc.handleAnswer({type: 'answer', sdp: atob(data)}, function (err) {
+                                        if (err) {
+                                            log(err);
+                                        }
+                                    })
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            },
+                            error: function(err) {
+                                pc.close();
+                            }
+                        });
+                    }
+                }
+            );
+        }
+
+        function closeWebRtc() {
+            peerConnections.forEach(function(v) {
+                v.close();
+            });
+        }
+
+        // window.startSession = function(pc) {
+        //     let sd = document.getElementById('remoteSessionDescription').value
+        //     if (sd === '') {
+        //         return alert('Session Description must not be empty')
+        //     }
+
+        //     try {
+        //         pc.setRemoteDescription(new RTCSessionDescription({type: 'answer', sdp: atob(sd)}))
+        //     } catch (e) {
+        //         alert(e)
+        //     }
+        // }
+    </script>
+</body>
+</html>

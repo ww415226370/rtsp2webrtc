@@ -6,83 +6,8 @@
 	<link type="text/css" rel="stylesheet" href="css/reset.css" />
 	<link type="text/css" rel="stylesheet" href="css/style2019-10-18.css" />
 	<script type="text/javascript" src="js/jqueryv3.3.1/jquery.js"></script>
-    <script type="text/javascript" src="./rtcpeerconnection.bundle.js"></script>
-	
 	<style type="text/css">			
-		
-		.switch {
-            width: 57px;
-            height: 28px;
-            position: relative;
-            border: 1px solid #003d69;
-            background-color: #666;
-            box-shadow: #003d69 0 0 0 0 inset;
-            border-radius: 20px;
-            background-clip: content-box;
-            display: inline-block;
-            -webkit-appearance: none;
-            user-select: none;
-            outline: none;
-        }
-        .switch:before {
-            content: '';
-            width: 26px;
-            height: 26px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            border-radius: 20px;
-            background-color: #fff;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-        }
-				
-        .switch:checked {
-            border-color: #003d69;
-            box-shadow: #003d69 0 0 0 16px inset;
-            background-color: #003d69;
-        }
-        .switch:checked:before {
-            left: 30px;
-        }
-				
-        .switch.switch-anim {
-            transition: border cubic-bezier(0, 0, 0, 1) 0.4s, box-shadow cubic-bezier(0, 0, 0, 1) 0.4s;
-        }
-        .switch.switch-anim:before {
-            transition: left 0.3s;
-        }
-        .switch.switch-anim:checked {
-            box-shadow: #003d69 0 0 0 16px inset;
-            background-color: #003d69;
-            transition: border ease 0.4s, box-shadow ease 0.4s, background-color ease 1.2s;
-        }
-        .switch.switch-anim:checked:before {
-            transition: left 0.3s;
-        }
-
-        #name,#name2{
-            width:40px;
-            height:25px;
-            /* border:1px solid #c4c4c4; */
-            margin-bottom:20px;
-            margin-left: -5px;
-            text-align: center;
-            font-size: 12px;
-            background: url(name.png) no-repeat center;
-            background-size: cover;
-        }	
-        #names{
-            width:40px;
-            height:25px;
-            /* border:1px solid #c4c4c4; */
-            margin-bottom:20px;
-            margin-left: -10px;
-            text-align: center;
-            font-size: 12px;
-            text-align: center;
-            background: url(name.png) no-repeat center;
-            background-size: cover;
-        }	 
+		/*  */
 	</style>
 </head>
 <body>
@@ -98,7 +23,6 @@
 				<li><button id="start" class="btn btn-primary">启动</button></li>
 				<li><button id="pause2continue" class="btn btn-primary">暂停</button></li>
 				<li><button id="reset" class="btn btn-primary">重置</button></li>
-				<li style="width: 200px;"><span style="position: relative;top:-7px;color:#fff;font-size: 14px;margin-right: 10px;">显示人物标签</span><input class="switch switch-anim" id='iptchk' type="checkbox" checked style="outline: none" ></li>
 			</ul>
 		</div>
 		<div class="pictures">
@@ -107,12 +31,9 @@
 					<span>2d监控页面</span>
 					<img id="btn-2d-to-big" src="img/icon-fullscreen.png" class="toggle" alt=""/>
 				</div>
-				<div id="picture-frame-2d-normal" class="picture-frame-2d-normal" style="position: relative;">
-					<img id="picture-2d-normal" src="img/picture2d.jpg" width="100%" />		 <!-- 背景 -->			
-                    <div>
-                        <div id="names" class="name" style="position: absolute;visibility:visible;">测试人</div>
-                    <img id="point1" class="point" src="img/bright.png" alt=""  />
-                    </div>
+				<div id="picture-frame-2d-normal" class="picture-frame-2d-normal">
+					<img id="picture-2d-normal" src="img/picture2d-1.jpg" width="100%" />		 <!-- 背景 -->			
+					<img id="point1" class="point" src="img/bright.png" alt=""  />
 					<img id="point2" class="point" src="img/bright.png" alt=""  />
 					<img id="point3" class="point" src="img/bright.png" alt=""  />
 					<img id="point4" class="point" src="img/bright.png" alt=""  />
@@ -124,12 +45,10 @@
 					<span>3d监控页面</span>
 					<img id="btn-3d-to-big" src="img/icon-fullscreen.png" alt="" class="toggle"/>
 				</div>
-				<div id="picture-frame-3d-normal" class="picture-frame-3d-normal" style="position: relative;">					
-                    <img src="img/picture3d.jpg" width="100%;" />
-                    <div >
-                         <div id="name" class="name" style="position: absolute;visibility:visible;">测试人</div>
-                        <img id="person1" class="person" alt="" src="img/person1_1.png"/>
-                    </div>
+				<div id="picture-frame-3d-normal" class="picture-frame-3d-normal">					
+                    <img src="img/picture3d-2.jpg" width="100%;" />
+                    
+                    <img id="person1" class="person" alt="" src="img/person1_1.png"/>
                     <img id="foot1_1" class="foot foot1"  alt="" src="img/1_1.png" />
                     <img id="foot1_2" class="foot foot2"  alt="" src="img/1_2.png" />
                     <img id="foot1_3" class="foot foot3"  alt="" src="img/1_3.png" />
@@ -169,11 +88,32 @@
 					<img id="btn-pop-tips" src="img/icon-pop-tips.png" alt="" />
 				</p>
 				<div class="video-list">
-					<div class="video-cell" style="display: none;">				
+					<div class="video-cell">				
 						<p class="bg">&nbsp;</p>	
-						<p class="title"></p>										
-						<!-- <video class="video-ins" width="224" controls></video> -->
-					</div>									
+						<p class="title">1号</p>										
+						<video class="video-ins" src="videos/20191008_01.mp4" width="224" controls></video>
+															 
+					</div>
+					<div class="video-cell">				
+						<p class="bg">&nbsp;</p>	
+						<p class="title">2号</p>										
+						<video class="video-ins" src="videos/20191008_02.mp4" width="224" controls></video>
+					</div>
+					<div class="video-cell">				
+						<p class="bg">&nbsp;</p>	
+						<p class="title">3号</p>										
+						<video class="video-ins" src="videos/20191008_03.mp4" width="224" controls></video>
+					</div>
+					<div class="video-cell">				
+						<p class="bg">&nbsp;</p>	
+						<p class="title">4号</p>										
+						<video class="video-ins" src="videos/20191008_04.mp4" width="224" controls></video>
+					</div>
+					<div class="video-cell">				
+						<p class="bg">&nbsp;</p>	
+						<p class="title">5号</p>										
+						<video class="video-ins" src="videos/20191008_05.mp4" width="224" controls></video>
+					</div>											
 				</div>	
 			</div>	
 		</div><!--end of videos-->
@@ -189,11 +129,8 @@
 			<img id="btn-2d-to-normal" class="btn-toggle" src="img/icons/close_white.png" alt="" >
 		</p>
 		<div id="picture-frame-2d-big" class="picture-frame-big">
-            <img id="picture-2d-big" src="img/picture2d.jpg" width="100%" style="position: relative;"/>  
-            <div> 
-                <div id="names" class="name" style="position: absolute;visibility:visible;">测试人</div>   			
-                <img id="point1" class="point" src="img/bright.png" alt=""  />
-            </div> 
+			<img id="picture-2d-big" src="img/picture2d-1.jpg" width="100%" />         			
+            <img id="point1" class="point" src="img/bright.png" alt=""  />
             <img id="point2" class="point" src="img/bright.png" alt=""  />
             <img id="point3" class="point" src="img/bright.png" alt=""  />
             <img id="point4" class="point" src="img/bright.png" alt=""  />
@@ -207,17 +144,10 @@
 			<span>3d监控页面</span>	
 			<img id="btn-3d-to-normal" class="btn-toggle" src="img/icons/close_white.png" alt="" >
 		</p>
-		<div id="picture-frame-3d-big" class="picture-frame-big" style="position: relative;" >
-			<img id="picture-3d-big" src="img/picture3d.jpg" width="100%" />
+		<div id="picture-frame-3d-big" class="picture-frame-big">
+			<img id="picture-3d-big" src="img/picture3d-2.jpg" width="100%" />
                       
-           
-              <div >    
-                        
-                         <div id="name" class="name" style="position: absolute;visibility:visible;">测试人</div>
-                        <img id="person1" class="person" alt="" src="img/person1_1.png"/>
-                    </div> 
-            <!-- <img id="person1" class="person" alt="" src="img/person1_1.png"/> -->
-            
+            <img id="person1" class="person" alt="" src="img/person1_1.png"/>
             <img id="foot1_1" class="foot foot1"  alt="" src="img/1_1.png" />
             <img id="foot1_2" class="foot foot2"  alt="" src="img/1_2.png" />
             <img id="foot1_3" class="foot foot3"  alt="" src="img/1_3.png" />
@@ -266,6 +196,7 @@
 	var totalFrame=0;
 	var handle=0;
 	var bigIntervalHandle=0;
+	var videos=$(".video-ins");
 	var isPause=true;
 	var originalData={};
 
@@ -299,9 +230,7 @@
 		$("#btn-pop-tips").on("click",popTips);
 		
 		//TODO:close tips
-        $("#btn-close-camera-position").on("click",closeTips);
-        
-        $("#iptchk").on("click",checkNum);
+		$("#btn-close-camera-position").on("click",closeTips);
 
 	});
 	//TODO:初始化页面
@@ -324,10 +253,7 @@
 		window.clearInterval(handle);                           //不管有没有都可以清除一下
         var temp;
         var points=$("#picture-frame-2d-normal .point");
-        var name1 = $("#picture-frame-2d-normal .name");
         var persons=$("#picture-frame-3d-normal .person");
-        var name = $("#picture-frame-3d-normal .name");
-         //var name2 = $("#picture-frame-3d-normal .name2");
         var foot1s=$("#picture-frame-3d-normal .foot1");
         var foot2s=$("#picture-frame-3d-normal .foot2");
         var foot3s=$("#picture-frame-3d-normal .foot3");
@@ -339,47 +265,34 @@
                     points.eq(ind).css({
                         left:val.pos_x/ratio,
                         top:val.pos_y/ratio
-                    }).show(); 
-                     name1.eq(ind).css({
-                        left:val.pos_x/ratio,
-                        top:val.pos_y/ratio-18
-                    }).show();
-                    //  name2.eq(ind).css({
-                    //     left:val.pos_x/ratio,
-                    //     top:val.pos_y/ratio-40,
-
-                    // }).show();
-                    name.eq(ind).css({
-                        left:val.pos_x/ratio,
-                        top:val.pos_y/ratio-23
-                    }).show();              
+                    }).show();                
                     persons.eq(ind).css({
                         left:val.pos_x/ratio,
                         top:val.pos_y/ratio
                     }).attr("src","img/person"+(ind+1)+"_"+val.image_person+".png").show();                   
-                    if(originalData[index-15]){
+                    if(originalData[index-25]){
                         foot1s.eq(ind).css({
-                            left:originalData[index-15].videolist[ind].pos_x/ratio,
-                            top:originalData[index-15].videolist[ind].pos_y/ratio
-                        }).attr("src","img/"+originalData[index-15].videolist[ind].image_foot+"_1"+".png").show();
+                            left:originalData[index-25].videolist[ind].pos_x/ratio,
+                            top:originalData[index-25].videolist[ind].pos_y/ratio
+                        }).attr("src","img/"+originalData[index-25].videolist[ind].image_foot+"_1"+".png").show();
                     }
-                    if(originalData[index-30]){
+                    if(originalData[index-50]){
                         foot2s.eq(ind).css({
-                            left:originalData[index-30].videolist[ind].pos_x/ratio,
-                            top:originalData[index-30].videolist[ind].pos_y/ratio
-                        }).attr("src","img/"+originalData[index-30].videolist[ind].image_foot+"_2"+".png").show();
+                            left:originalData[index-50].videolist[ind].pos_x/ratio,
+                            top:originalData[index-50].videolist[ind].pos_y/ratio
+                        }).attr("src","img/"+originalData[index-50].videolist[ind].image_foot+"_2"+".png").show();
                     } 
-                    if(originalData[index-45]){
+                    if(originalData[index-75]){
                         foot3s.eq(ind).css({
-                            left:originalData[index-45].videolist[ind].pos_x/ratio,
-                            top:originalData[index-45].videolist[ind].pos_y/ratio
-                        }).attr("src","img/"+originalData[index-45].videolist[ind].image_foot+"_3"+".png").show();
+                            left:originalData[index-75].videolist[ind].pos_x/ratio,
+                            top:originalData[index-75].videolist[ind].pos_y/ratio
+                        }).attr("src","img/"+originalData[index-75].videolist[ind].image_foot+"_3"+".png").show();
                     }
-                    if(originalData[index-60]){
+                    if(originalData[index-100]){
                         foot4s.eq(ind).css({
-                            left:originalData[index-60].videolist[ind].pos_x/ratio,
-                            top:originalData[index-60].videolist[ind].pos_y/ratio
-                        }).attr("src","img/"+originalData[index-60].videolist[ind].image_foot+"_4"+".png").show();
+                            left:originalData[index-100].videolist[ind].pos_x/ratio,
+                            top:originalData[index-100].videolist[ind].pos_y/ratio
+                        }).attr("src","img/"+originalData[index-100].videolist[ind].image_foot+"_4"+".png").show();
                     }
                 }else{
                     points.eq(ind).hide();                  
@@ -404,18 +317,15 @@
 			index++;
 		},40);
 		//播放所有视频
-        var videos=$(".video-ins");
-		videos.each(function(index,item){					
+		videos.each(function(index,item){						
 			item.play();
 		});
 	}
 	//TODO:停止
 	function pause2continue(){
-        var videos=$(".video-ins");
 		if(isPause){
-            window.clearInterval(handle);
-            index=0;
-			videos.each(function(index,item){					
+            window.clearInterval(handle);         
+			videos.each(function(index,item){						
 				item.pause();
 			});
 			$(this).text("继续");
@@ -435,7 +345,6 @@
 		//$("#picture-frame-3d-normal .person").hide();
 		//$("#picture-frame-3d-normal .foot").hide();
 		//reload所有视频
-        var videos=$(".video-ins");
 		videos.each(function(index,item){						
 			item.load();
 		});
@@ -448,8 +357,7 @@
 		var picture2dBig=$("#picture-2d-big");		
         var bigRatio=1920/picture2dBig.width();	
         var temp;	
-        var points=$("#picture-frame-2d-big .point");
-        var name2=$("#picture-frame-2d-big .name");	
+        var points=$("#picture-frame-2d-big .point");	
 		bigIntervalHandle=window.setInterval(function(){	
             temp=originalData[index];
             temp.videolist.forEach(function(val,ind,arr){
@@ -457,11 +365,7 @@
                     points.eq(ind).css({
                         left:val.pos_x/bigRatio,
                         top:val.pos_y/bigRatio
-                    }).show();  
-                    name2.eq(ind).css({
-                        left:val.pos_x/bigRatio,
-                        top:val.pos_y/bigRatio-18
-                    }).show();                                  
+                    }).show();                                   
                 }else{
                     points.eq(ind).hide(); 
                 }
@@ -483,7 +387,6 @@
         var bigRatio=1920/picture2dBig.width();
         
         var persons=$("#picture-frame-3d-big .person");
-         var names = $("#picture-frame-3d-big .name");
         var foot1s=$("#picture-frame-3d-big .foot1");
         var foot2s=$("#picture-frame-3d-big .foot2");
         var foot3s=$("#picture-frame-3d-big .foot3");
@@ -502,38 +405,34 @@
         bigIntervalHandle=window.setInterval(function(){				
 			temp=originalData[index];
             temp.videolist.forEach(function(val,ind,arr){
-                if(val.id>0){  
-                    names.eq(ind).css({
-                        left:val.pos_x/bigRatio,
-                        top:val.pos_y/bigRatio-25
-                    }).show();               
+                if(val.id>0){                 
                     persons.eq(ind).css({
                         left:val.pos_x/bigRatio,
                         top:val.pos_y/bigRatio
                     }).attr("src","img/person"+(ind+1)+"_"+val.image_person+".png").show();                   
-                    if(originalData[index-15]){
+                    if(originalData[index-25]){
                         foot1s.eq(ind).css({
-                            left:originalData[index-15].videolist[ind].pos_x/bigRatio,
-                            top:originalData[index-15].videolist[ind].pos_y/bigRatio
-                        }).attr("src","img/"+originalData[index-15].videolist[ind].image_foot+"_1"+".png").show();
+                            left:originalData[index-25].videolist[ind].pos_x/bigRatio,
+                            top:originalData[index-25].videolist[ind].pos_y/bigRatio
+                        }).attr("src","img/"+originalData[index-25].videolist[ind].image_foot+"_1"+".png").show();
                     }
-                    if(originalData[index-30]){
+                    if(originalData[index-50]){
                         foot2s.eq(ind).css({
-                            left:originalData[index-30].videolist[ind].pos_x/bigRatio,
-                            top:originalData[index-30].videolist[ind].pos_y/bigRatio
-                        }).attr("src","img/"+originalData[index-30].videolist[ind].image_foot+"_2"+".png").show();
+                            left:originalData[index-50].videolist[ind].pos_x/bigRatio,
+                            top:originalData[index-50].videolist[ind].pos_y/bigRatio
+                        }).attr("src","img/"+originalData[index-50].videolist[ind].image_foot+"_2"+".png").show();
                     } 
-                    if(originalData[index-45]){
+                    if(originalData[index-75]){
                         foot3s.eq(ind).css({
-                            left:originalData[index-45].videolist[ind].pos_x/bigRatio,
-                            top:originalData[index-45].videolist[ind].pos_y/bigRatio
-                        }).attr("src","img/"+originalData[index-45].videolist[ind].image_foot+"_3"+".png").show();
+                            left:originalData[index-75].videolist[ind].pos_x/bigRatio,
+                            top:originalData[index-75].videolist[ind].pos_y/bigRatio
+                        }).attr("src","img/"+originalData[index-75].videolist[ind].image_foot+"_3"+".png").show();
                     }
-                    if(originalData[index-60]){
+                    if(originalData[index-100]){
                         foot4s.eq(ind).css({
-                            left:originalData[index-60].videolist[ind].pos_x/bigRatio,
-                            top:originalData[index-60].videolist[ind].pos_y/bigRatio
-                        }).attr("src","img/"+originalData[index-60].videolist[ind].image_foot+"_4"+".png").show();
+                            left:originalData[index-100].videolist[ind].pos_x/bigRatio,
+                            top:originalData[index-100].videolist[ind].pos_y/bigRatio
+                        }).attr("src","img/"+originalData[index-100].videolist[ind].image_foot+"_4"+".png").show();
                     }
                 }else{                                
                     persons.eq(ind).hide();
@@ -567,103 +466,6 @@
 	function closeTips(){
 		$("#modal").hide();
 		$("#camera-position").hide();
-    }
-    
-    //人物切换
-    
-    function checkNum(){
-        if($('.switch-anim').prop('checked')){
-            console.log("选中");
-            document.getElementById("name").style.visibility="visible"
-            document.getElementById("names").style.visibility="visible"
-        }else{
-            console.log("没选中");
-            document.getElementById("name").style.visibility="hidden"
-            document.getElementById("names").style.visibility="hidden"
-        }
-    }
-
-    // 发起rtsp连接请求
-    var rtsplist = [
-        'rtsp://admin:admin@172.18.135.131:554/1/h264major',
-        'rtsp://admin:admin@172.18.135.131:554/1/h264major',
-        'rtsp://admin:admin@172.18.135.131:554/1/h264major',
-        'rtsp://admin:admin@172.18.135.131:554/1/h264major',
-        'rtsp://admin:admin@172.18.135.131:554/1/h264major'
-    ];
-
-    var peerConnections = [];
-
-    rtsplist.forEach(function(v) {
-        newPeerConnection(v);
-    });
-
-    var videoListDom = $('.video-list');
-
-    function newPeerConnection(rtspUrl) {
-        var newRtcPeerConnection = new PeerConnection();
-        peerConnections.push(newRtcPeerConnection);
-        rtcPeerCreateOffer(newRtcPeerConnection, rtspUrl);
-    }
-
-    var log = function(msg){
-        console.log(msg);
-    }
-
-    function rtcPeerCreateOffer(pc, rtspUrl) {
-        pc.on('addStream', function (event) {
-            // it's your job to send these to someone
-            var video = document.createElement('video');
-            video.srcObject = event.stream;
-            video.autoplay = false;
-            video.controls = true;
-            video.muted = true;
-            var videoCell = videoListDom.children().eq(0).clone();
-            videoCell.find('.title').html(videoListDom.children().length + '号');
-            $(video).addClass('video-ins').css({width: '224px'});
-            videoCell.append($(video));
-            videoCell.show();
-            videoListDom.append(videoCell);
-        });
-
-
-        pc.offer(
-            {
-                offerToReceiveAudio: false,
-                offerToReceiveVideo: true
-            }, 
-            function (err, offer) {
-                if (!err) {
-                    $.ajax({
-                        url: "/recive",
-                        type: 'post',
-                        data: {
-                            data:btoa(offer.sdp), rtspUrl: rtspUrl
-                        },
-                        success: function(data){
-                            try {
-                                pc.handleAnswer({type: 'answer', sdp: atob(data)}, function (err) {
-                                    if (err) {
-                                        log(err);
-                                    }
-                                })
-                            } catch (e) {
-                                console.log(e);
-                            }
-                        },
-                        error: function(err) {
-                            pc.close();
-                        }
-                    });
-                }
-            }
-        );
-    }
-
-    function closeWebRtc() {
-        peerConnections.forEach(function(v) {
-            v.close();
-        });
-    }
+	}
 </script>
 </html>

@@ -1,0 +1,127 @@
+/**
+ * Primary style
+ */
+
+ body{
+    background-color: #025cd9;
+}
+div#container{
+    width: 100%;height: 100%;
+}
+div.north{
+    height: 62px;background-color: #014993;position: relative;
+}
+div.north img.logo{
+    margin: 12px 0 0 10px;float: left;
+}
+div.north .banner{
+    color: #fff;font-size:30px;padding-top: 10px;margin-left: 200px;
+}
+ul.form-control{
+    position: absolute;right: 0px;bottom: 5px;
+}
+ul.form-control > li {
+    width: 60px;margin: 5px;float: left;margin-left: 10px;
+}
+input#search-text{
+    height: 32px;border: 1px solid transparent;
+    border-radius: 4px;text-indent: 5px;
+}
+.btn {
+    display: inline-block; padding: 0 12px;line-height:30px;text-align: center;
+    white-space: nowrap;cursor: pointer;border: 1px solid transparent; border-radius: 4px;
+}
+.btn-primary {
+    color: #006699;background-color: #fff;border-color: #2e6da4;
+}
+div.pictures{
+    width: 100%;height:55%; min-height: 280px;display:table;
+}
+div.pictures .left{
+    width: 50%;height:55%;display:table-cell; 
+}
+div.pictures .right{
+    width: 50%;height:55%;display:table-cell;
+}
+div.pictures .picture-title{
+    height:32px;width: 80%;margin: 0px auto;margin-top: 10px;background-color:#333;line-height: 32px;text-indent:5px;color: #fff;
+}
+.toggle{
+    width: 18px; float: right;margin: 5px 5px 0 0;cursor: pointer;
+}
+.picture-frame-2d-normal,.picture-frame-3d-normal{
+    width: 80%;position: relative;margin: 0px auto;
+}
+.picture-frame-2d-normal .point,.picture-frame-3d-normal .point{
+    position: absolute;left:0px;top:0px;width:16px;height:16px;
+}
+img.person{
+    position: absolute;left:50px;top:30px; width:21px; height:21px;z-index: 1
+}
+img.foot{
+    position: absolute;left:50;top:-15px; width:90px; height:90px;
+}
+/* acitve与passive */
+.active{
+    display: block;
+}
+.passive{
+    display: none;
+}
+/* 模态框  */
+div#modal{
+    width: 100%;height:100%;background-color:black;opacity:0.5;position:absolute;left:0px;top:0px; z-index: 99;
+}
+.pop-win{
+    width:64%;height:77%;background:#333;position: absolute;left: 50%;top: 50%;margin-left: -32%;margin-top:-20%; z-index: 100;
+    border:5px solid #333;border-radius: 4px;overflow: hidden;
+}
+.pop-win .title{
+    line-height:32px;text-indent: 5px;position: relative; background-color:#333;line-height:32px;text-indent:5px;color: #fff;
+}
+.pop-win .btn-toggle{
+    position: absolute;z-index:100;right: 5px;top: 5px;width: 18px;cursor: pointer;
+}
+div.videos{
+    width:100%;height:24%; min-height:200px;
+}
+#btn-pop-tips{
+    cursor: pointer;
+}
+.video-list-frame {
+    width: 90%;margin: 0px auto;overflow-x: auto;background-color: #333
+}
+.video-list-frame > p.title{
+    line-height:40px;text-indent:5px;color:#fff;background-color:#111;position: relative;
+}
+.video-list-frame p.title #btn-pop-tips{
+    position: absolute;right:5px;top:5px;
+}
+.video-list-frame .video-list {
+    white-space: nowrap;
+}
+.video-list-frame .video-list div.video-cell {
+    box-sizing: border-box;	white-space: normal;word-wrap: break-word;word-break: break-all;
+    overflow: hidden;display: inline-block;	width: 280px;height: 100%;margin: 10px;position: relative;
+}	
+.video-list-frame .video-list div.video-cell .bg {
+    position:absolute;top:0px;left:0px;color:#fff;width: 224px;height:28px;opacity: 0.5;background-color: black;
+}		
+.video-list-frame .video-list div.video-cell .title {
+    position:absolute;top:0px;left:0px;color:#fff;width: 224px;height:28px;line-height: 28px;text-indent: 5px;
+}	
+.video-list-frame .video-list div.video-cell video.video-ins {
+    margin-top:5px;
+}	
+.picture-frame-big{
+    width: 100%;position: relative;margin: 0px auto;
+}
+.picture-frame-big .movable{
+    position: absolute;
+}
+/* #picture-frame-2d-big #picture-2d-big{
+    width: 100%;
+} */
+#picture-frame-2d-big .point{
+    position: absolute;left:0px;top:0px;width:30px;height:30px;
+}
